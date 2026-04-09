@@ -1,36 +1,30 @@
 function createLoginTracker(userInfo) {
-let attemptCount = 0;
-let locked = false;
+  let attemptCount = 0;
+  let locked = false;
 
-  let confirmLogin = (passwordAttempt) => {
-
-    if(locked){
+  return function (passwordAttempt) {
+    if (locked) {
       return "Account locked due to too many failed login attempts";
     }
 
-    if (passwordAttempt === userInfo.password || attemptCount < 3) {
+    // Correct password
+    if (passwordAttempt === userInfo.password) {
       attemptCount = 0;
       return "Login successful";
-      
     }
 
-    else if (failedAttempts >= 3){
+    // Incorrect password
+    else if (passwordAttempt !== userInfo.password && attemptCount < 3){
+    attemptCount++;
+    return `Attempt ${attemptCount}: Login failed`;
+    }
+
+    if (attemptCount = 3) {
       locked = true;
-      return "Account locked";
-    }
-    
-    else{
-      attemptCount ++;
-      return `Attempt ${attemptCount}: Login failed`;
+      return "Account locked due to too many failed login attempts";
     }
 
-  }
+  };
 }
 
-
-let userInfo = {
-  username: "Ashley",
-  password: "Pinkflamingo",
-}
-
-const { createLoginTracker } = require('../index');
+module.exports = { createLoginTracker };
